@@ -1,0 +1,32 @@
+# Base44 dev environment for the claude-video / watch skill.
+#
+# This is a Python Agent Skills package (yt-dlp + ffmpeg + optional
+# Whisper/Gemini transcription), NOT a web application. There is no web
+# server or frontend to serve on port 3000. The compose below provisions
+# the runtime dependencies and runs the isolated pytest suite so the
+# project can be verified in the sandbox.
+
+services:
+  test:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - BASE44_PREVIEW_MODE
+      - PYTHONUNBUFFERED=1
+    command: ["sh", "-ec", "apt-get update -qq && apt-get install -y -qq ffmpeg >/dev/null && python -m pip install --quiet --upgrade pytest 'yt-dlp[default]' && python -m pytest -q"]
+    restart: "no"
+
+  # Diagnostic shell — run setup.py --json to check tool availability.
+  diag:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - BASE44_PREVIEW_MODE
+      - PYTHONUNBUFFERED=1
+    command: ["sh", "-ec", "apt-get update -qq && apt-get install -y -qq ffmpeg >/dev/null && python -m pip install --quiet --upgrade 'yt-dlp[default]' && python skills/watch/scripts/setup.py --json"]
+    restart: "no"
+    profiles: ["diag"]

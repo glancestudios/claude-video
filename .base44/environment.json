@@ -1,0 +1,25 @@
+{
+  "previewPort": null,
+  "healthPath": null,
+  "startCommand": "docker compose -f docker-compose.base44.yml run --rm test",
+  "secrets": [
+    {
+      "name": "GEMINI_API_KEY",
+      "description": "Optional. Free key from https://aistudio.google.com/apikey. Enables the Gemini video engine. Without it, the local engine (frames + captions) works with no key.",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
+    },
+    {
+      "name": "GROQ_API_KEY",
+      "description": "Optional. Key from https://console.groq.com/keys. Enables Groq cloud transcription fallback.",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
+    },
+    {
+      "name": "OPENAI_API_KEY",
+      "description": "Optional. Key from https://platform.openai.com/api-keys. Enables OpenAI cloud transcription fallback.",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
+    }
+  ]
+}

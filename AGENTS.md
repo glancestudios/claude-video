@@ -49,3 +49,11 @@ bash skills/watch/scripts/build-skill.sh   # → dist/watch.skill
 - Keep the version in sync across `skills/watch/SKILL.md` (`metadata.version`), `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` when cutting a release.
 - Releasing: tag `vX.Y.Z` and push the tag; `.github/workflows/release.yml` builds `dist/watch.skill` and attaches it to the GitHub release.
 - Never commit real API keys or `.env` contents; keys live in `~/.config/watch/.env` (mode `0600`) at runtime.
+
+## Base44 sandbox
+
+- This is a Python Agent Skills package, **not a web application**. There is no web server, frontend, or API — nothing serves on port 3000. The preview iframe will stay on a loading screen because there is no web entry point to show.
+- `docker-compose.base44.yml` provisions a `python:3.12-slim` container with `ffmpeg` (apt) and `yt-dlp[default]` + `pytest` (pip), bind-mounts the source, and runs the isolated test suite.
+- **Verify the project:** `docker compose -f docker-compose.base44.yml run --rm test` — 249 tests, no network or API keys required.
+- **Check tool availability:** `docker compose -f docker-compose.base44.yml run --rm diag` — runs `setup.py --json`.
+- All three API keys (`GEMINI_API_KEY`, `GROQ_API_KEY`, `OPENAI_API_KEY`) are **optional**. The local engine and the test suite work without any of them. Only the Gemini video engine and cloud transcription fallbacks need keys.
